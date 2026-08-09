@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-view%20app-46E3B7?style=flat-square&logo=render&logoColor=white)](https://invoice-intelligence-system-8r36.onrender.com)
 ![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
@@ -47,7 +48,11 @@ Both are trained offline against a real procurement SQLite database, then served
 
 ## Live Demo
 
-This README intentionally skips screenshots — the entire point of the project is that it's alive. Run it locally in under two minutes ([Getting Started](#getting-started)) or deploy it in one click ([Deployment](#deployment)) and try both models yourself, including a drag-and-drop CSV batch upload for the risk classifier.
+**[invoice-intelligence-system-8r36.onrender.com](https://invoice-intelligence-system-8r36.onrender.com)**
+
+This README intentionally skips screenshots — the entire point of the project is that it's alive. Try both models directly on the link above, including a drag-and-drop CSV batch upload for the risk classifier — or run it locally in under two minutes ([Getting Started](#getting-started)) to see the code path yourself.
+
+> Hosted on Render's free tier, so if the app has been idle the first request can take 30–50s to spin back up. It's fast on every request after that.
 
 ## Key Features
 
@@ -321,7 +326,7 @@ docker build -t invoice-intelligence-system .
 docker run -p 8000:8000 invoice-intelligence-system
 ```
 
-**Render.com:** connect the repo — `render.yaml` is picked up automatically as a Blueprint.
+**Render.com:** connect the repo — `render.yaml` is picked up automatically as a Blueprint. (This is how the [live demo](https://invoice-intelligence-system-8r36.onrender.com) above is deployed.)
 
 **Railway / Heroku-style platforms:** connect the repo — `Procfile` is picked up automatically.
 
