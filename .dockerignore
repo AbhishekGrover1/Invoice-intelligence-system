@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.ipynb_checkpoints/
+.pytest_cache/
+.venv/
+venv/
+env/
+Notebook/
+Data/
+tests/
+*.md
+.env
+.env.local
+.DS_Store

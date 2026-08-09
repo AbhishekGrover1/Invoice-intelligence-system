@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice Intelligence System — ML-Powered Freight &amp; Invoice Risk Prediction</title>
+<meta name="description" content="A full-stack machine learning system that predicts freight cost and flags high-risk invoices for manual review, trained on 5,543 real vendor invoices. FastAPI backend, scikit-learn models, live REST API.">
+<meta name="theme-color" content="#08090b">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Invoice Intelligence System">
+<meta property="og:description" content="Two production ML models — freight cost regression and invoice risk classification — served live via FastAPI.">
+<meta property="og:type" content="website">
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Petit+Formal+Script&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<a class="sr-only" href="#main">Skip to content</a>
+
+<!-- ============================== NAV ============================== -->
+<header class="nav">
+  <div class="container nav__row">
+    <a href="#top" class="nav__brand">
+      <svg class="nav__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="18.5" stroke="var(--brand-gold)" stroke-width="1.2" opacity="0.55"/>
+        <circle cx="20" cy="20" r="13.5" stroke="var(--brand-gold)" stroke-width="1"/>
+        <path d="M13.5 15.5h13M13.5 20h13M13.5 24.5h8.5" stroke="var(--brand-gold-bright)" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      Invoice Intelligence
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#how-it-works">How it Works</a>
+      <a href="#demo">Try it Live</a>
+      <a href="#performance">Performance</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#api">API</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a class="nav__github" href="https://github.com/AbhishekGrover1" target="_blank" rel="noopener" aria-label="View source on GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.07 11.07 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.44-2.7 5.42-5.28 5.7.42.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+      </a>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg id="navToggleIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nav__mobile" id="navMobile" aria-label="Mobile">
+    <a href="#how-it-works">How it Works</a>
+    <a href="#demo">Try it Live</a>
+    <a href="#performance">Performance</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#api">API</a>
+    <a href="https://github.com/AbhishekGrover1" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ============================== HERO ============================== -->
+<section class="hero" id="top">
+  <div class="hero__deco" aria-hidden="true">
+    <div class="deco-stamp deco-stamp--1">Audited</div>
+    <div class="deco-stamp deco-stamp--2">ML&nbsp;Verified</div>
+    <div class="deco-stamp deco-stamp--3">Flagged</div>
+  </div>
+
+  <div class="container hero__grid">
+    <span class="hero__kicker">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2v20M2 12h20"/></svg>
+      Two production ML models · Real procurement data
+    </span>
+
+    <h1>Read every invoice <em>like an auditor would.</em></h1>
+
+    <p class="hero__lede">
+      Invoice Intelligence System is a full-stack ML application trained on <strong>5,543 real vendor invoices</strong>.
+      One model predicts freight cost before a shipment ships; the other flags invoices that need a human's eyes
+      before they get paid. Both are live below — not mockups.
+    </p>
+
+    <div class="hero__actions">
+      <a href="#demo" class="btn btn--primary">
+        Try it live
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="https://github.com/AbhishekGrover1" target="_blank" rel="noopener" class="btn btn--ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.07 11.07 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.44-2.7 5.42-5.28 5.7.42.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+        View source
+      </a>
+    </div>
+
+    <div class="hero__stats">
+      <div class="hero__stat">
+        <div class="hero__stat-value" data-countup="5543" data-decimals="0">0</div>
+        <div class="hero__stat-label">Invoices trained on</div>
+      </div>
+      <div class="hero__stat">
+        <div class="hero__stat-value" data-countup="96.99" data-decimals="2" data-suffix="%">0%</div>
+        <div class="hero__stat-label">Freight model R²</div>
+      </div>
+      <div class="hero__stat">
+        <div class="hero__stat-value">2 <span class="text-faint" style="font-size:0.6em;">models</span></div>
+        <div class="hero__stat-label">Served by 1 REST API</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== HOW IT WORKS ============================== -->
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section__head-row reveal">
+      <div>
+        <span class="section__eyebrow">Pipeline</span>
+        <h2 class="section__heading">From raw procurement data to a live prediction</h2>
+        <p class="section__lede">Both models are trained offline from the same SQLite database, then served by a FastAPI layer that loads the trained artifacts once and keeps them in memory.</p>
+      </div>
+    </div>
+
+    <div class="pipeline reveal">
+      <div class="pipeline__step">
+        <div class="pipeline__num">01</div>
+        <h3>Ingest</h3>
+        <p>A real SQLite database of vendor purchases, invoices, and pricing — 5 tables, 2.37M+ purchase line items.</p>
+        <p style="margin-top:10px;"><code>vendor_invoice · purchases</code></p>
+      </div>
+      <div class="pipeline__step">
+        <div class="pipeline__num">02</div>
+        <h3>Engineer</h3>
+        <p>SQL joins aggregate purchase-order totals and timing into the exact feature set each model trains on.</p>
+        <p style="margin-top:10px;"><code>data_preprocessing.py</code></p>
+      </div>
+      <div class="pipeline__step">
+        <div class="pipeline__num">03</div>
+        <h3>Train &amp; Select</h3>
+        <p>Three candidate algorithms compete per task — the best one on held-out test data is what actually ships.</p>
+        <p style="margin-top:10px;"><code>train.py → models/*.pkl</code></p>
+      </div>
+      <div class="pipeline__step">
+        <div class="pipeline__num">04</div>
+        <h3>Serve</h3>
+        <p>FastAPI loads both trained models once at startup and exposes them as a REST API this page calls directly.</p>
+        <p style="margin-top:10px;"><code>backend/main.py</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== DEMO ============================== -->
+<section class="section ruled" id="demo">
+  <div class="container">
+    <div class="reveal" style="margin-bottom: 40px;">
+      <span class="section__eyebrow">Live demo</span>
+      <h2 class="section__heading">Try both models yourself</h2>
+      <p class="section__lede">These aren't mockups — every prediction below is a real request to the FastAPI backend running this page.</p>
+    </div>
+
+    <div class="demo__tabs reveal" role="tablist" aria-label="Choose a model">
+      <button class="demo__tab is-active" data-demo-tab="freight" role="tab" aria-selected="true">Freight Cost</button>
+      <button class="demo__tab" data-demo-tab="risk" role="tab" aria-selected="false">Invoice Risk</button>
+    </div>
+
+    <!-- FREIGHT PANEL -->
+    <div class="demo__panel is-active reveal" id="panel-freight" role="tabpanel">
+      <div class="demo__card">
+        <form class="demo__form" id="freightForm" novalidate>
+          <h3>Freight Cost Predictor</h3>
+          <p class="hint">Estimates freight cost from the invoice total using Linear Regression — R² = 96.99% on held-out test data.</p>
+
+          <div class="field" id="freightDollarsField">
+            <label for="freightDollars">Invoice amount ($)</label>
+            <input type="number" id="freightDollars" name="dollars" min="0.01" step="0.01" placeholder="e.g. 18500" inputmode="decimal" required>
+            <p class="field__error">Enter an invoice amount greater than 0.</p>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--block" id="freightSubmit">Predict Freight Cost</button>
+        </form>
+
+        <div class="demo__result" aria-live="polite">
+          <div class="result-idle" id="freightIdle">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 2h12v20l-2-1.2L14 22l-2-1.2L10 22l-2-1.2L6 22V2Z"/><path d="M9 7h6M9 11h6M9 15h3"/></svg>
+            Enter an invoice amount to see the predicted freight cost.
+          </div>
+          <div class="result-loading" id="freightLoading"><span></span><span></span><span></span></div>
+          <p class="result-error" id="freightError"></p>
+          <div class="freight-result" id="freightResult">
+            <div class="freight-result__label">Predicted freight cost</div>
+            <div class="freight-result__value mono" id="freightValue">$0.00</div>
+            <p class="freight-result__sub" id="freightSub"></p>
+            <div class="freight-result__bar"><div class="freight-result__bar-fill" id="freightBarFill"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK PANEL -->
+    <div class="demo__panel" id="panel-risk" role="tabpanel">
+
+      <div class="demo__tabs" role="tablist" aria-label="Single or batch" style="margin-bottom:28px;">
+        <button class="demo__tab is-active" data-risk-tab="single" role="tab" aria-selected="true">Single Invoice</button>
+        <button class="demo__tab" data-risk-tab="batch" role="tab" aria-selected="false">Batch Upload (CSV)</button>
+      </div>
+
+      <!-- SINGLE -->
+      <div class="demo__panel is-active" id="risk-single">
+        <div class="demo__card">
+          <form class="demo__form" id="riskForm" novalidate>
+            <h3>Invoice Risk Evaluator</h3>
+            <p class="hint">Flags invoices likely to need manual review — Random Forest, 77.55% accuracy, 99.27% precision on flagged invoices.</p>
+
+            <div class="field-row">
+              <div class="field" id="riskQuantityField">
+                <label for="riskQuantity">Invoice quantity</label>
+                <input type="number" id="riskQuantity" min="1" step="1" placeholder="120" required>
+                <p class="field__error">Required, whole number &gt; 0.</p>
+              </div>
+              <div class="field" id="riskDollarsField">
+                <label for="riskDollars">Invoice amount ($)</label>
+                <input type="number" id="riskDollars" min="0.01" step="0.01" placeholder="5400.00" required>
+                <p class="field__error">Required, &gt; 0.</p>
+              </div>
+            </div>
+
+            <div class="field" id="riskFreightField">
+              <label for="riskFreight">Freight cost ($)</label>
+              <input type="number" id="riskFreight" min="0" step="0.01" placeholder="210.00" required>
+              <p class="field__error">Required, 0 or greater.</p>
+            </div>
+
+            <div class="field-row">
+              <div class="field" id="riskTotalQtyField">
+                <label for="riskTotalQty">PO total item quantity</label>
+                <input type="number" id="riskTotalQty" min="1" step="1" placeholder="118" required>
+                <p class="field__error">Required, whole number &gt; 0.</p>
+              </div>
+              <div class="field" id="riskTotalDollarsField">
+                <label for="riskTotalDollars">PO total item dollars ($)</label>
+                <input type="number" id="riskTotalDollars" min="0.01" step="0.01" placeholder="5390.00" required>
+                <p class="field__error">Required, &gt; 0.</p>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--block" id="riskSubmit">Evaluate Invoice</button>
+          </form>
+
+          <div class="demo__result" aria-live="polite">
+            <div class="result-idle" id="riskIdle">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.2 2.2L16 10"/></svg>
+              Fill in the invoice details for an instant risk assessment.
+            </div>
+            <div class="result-loading" id="riskLoading"><span></span><span></span><span></span></div>
+            <p class="result-error" id="riskError"></p>
+            <div class="stamp-result" id="riskStampResult">
+              <div class="stamp" id="riskStamp"></div>
+              <div class="stamp-result__meta">
+                <div class="stamp-result__prob-label">
+                  <span>Flag probability</span>
+                  <span id="riskProbPct">0%</span>
+                </div>
+                <div class="stamp-result__prob-bar"><div class="stamp-result__prob-fill" id="riskProbFill"></div></div>
+                <p class="stamp-result__note" id="riskNote"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BATCH -->
+      <div class="demo__panel" id="risk-batch">
+        <div class="card">
+          <h3 style="font-size:19px; margin-bottom:6px;">Batch Invoice Risk</h3>
+          <p class="hint" style="color:var(--paper-faint); font-size:13.5px; margin-bottom:24px;">
+            Upload a CSV with columns <span class="mono" style="color:var(--paper-mid);">invoice_quantity, invoice_dollars, Freight, total_item_quantity, total_item_dollars</span> to evaluate many invoices at once.
+          </p>
+
+          <div class="batch__dropzone" id="batchDropzone" tabindex="0" role="button" aria-label="Upload CSV file">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-1-8.9A5.5 5.5 0 0 1 16.9 7.1 4.5 4.5 0 0 1 17 18H7Z"/><path d="M12 12v6M9.5 14.5 12 12l2.5 2.5"/></svg>
+            <p>Drop a CSV here, or click to browse</p>
+            <p class="filename" id="batchFileName"></p>
+          </div>
+          <input type="file" id="batchFileInput" accept=".csv" class="sr-only">
+
+          <p class="batch__sample-link">Don't have a file handy? <a href="samples/invoice_risk_batch_sample.csv" download>Download a sample CSV</a> to try it.</p>
+
+          <button class="btn btn--primary" id="batchAnalyzeBtn" style="margin-top:20px;" disabled>Analyze Batch</button>
+          <p class="result-error" id="batchError" style="margin-top:14px;"></p>
+
+          <div class="batch__summary" id="batchSummary" style="margin-top:28px;">
+            <div class="batch__summary-cell">
+              <div class="batch__summary-value" id="batchTotal">0</div>
+              <div class="batch__summary-label">Total rows</div>
+            </div>
+            <div class="batch__summary-cell">
+              <div class="batch__summary-value" id="batchFlagged" style="color:var(--signal-risk-bright);">0</div>
+              <div class="batch__summary-label">Flagged</div>
+            </div>
+            <div class="batch__summary-cell">
+              <div class="batch__summary-value" id="batchApproved" style="color:var(--signal-safe-bright);">0</div>
+              <div class="batch__summary-label">Auto-approved</div>
+            </div>
+          </div>
+
+          <div class="batch__table-wrap" id="batchTableWrap" style="margin-top:18px;">
+            <table class="batch__table">
+              <thead><tr><th>Row</th><th>Result</th><th>Flag probability</th><th>Confidence</th></tr></thead>
+              <tbody id="batchTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PERFORMANCE ============================== -->
+<section class="section" id="performance">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:48px;">
+      <span class="section__eyebrow">Model performance</span>
+      <h2 class="section__heading">How good are these models, <em>really?</em></h2>
+      <p class="section__lede">Real, reproducible test-set metrics — not cherry-picked numbers. Both models were evaluated on the same 80/20 held-out split (<span class="mono">random_state=42</span>) of the 5,543-invoice dataset.</p>
+    </div>
+
+    <div class="perf__grid">
+      <div class="card reveal">
+        <div class="card__head">
+          <div>
+            <div class="card__title">Freight Cost Regression</div>
+            <p style="font-size:13px; color:var(--paper-faint); margin-top:4px;">Target: <span class="mono">Freight</span> · Feature: <span class="mono">Dollars</span></p>
+          </div>
+          <span class="card__tag">Linear Regression · selected</span>
+        </div>
+
+        <table class="metric-table">
+          <thead><tr><th>Algorithm</th><th>MAE</th><th>RMSE</th><th>R²</th></tr></thead>
+          <tbody>
+            <tr class="is-winner"><td>Linear Regression</td><td>$24.11</td><td>$124.72</td><td>96.99%</td></tr>
+            <tr><td>Random Forest</td><td>$26.13</td><td>$134.79</td><td>96.48%</td></tr>
+            <tr><td>Decision Tree</td><td>$32.97</td><td>$150.31</td><td>95.63%</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          Freight cost scales almost linearly with invoice value in this dataset, so the simplest model wins —
+          <strong>lowest MAE on the test set</strong> is the selection rule in <span class="mono">train.py</span>, not a fixed preference for linear models.
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card__head">
+          <div>
+            <div class="card__title">Invoice Risk Classification</div>
+            <p style="font-size:13px; color:var(--paper-faint); margin-top:4px;">Target: <span class="mono">flag_invoice</span> · 5 features · 66.6% / 33.4% class split</p>
+          </div>
+          <span class="card__tag">Random Forest · selected</span>
+        </div>
+
+        <div class="confusion">
+          <div></div>
+          <div class="confusion__label" style="justify-content:center;">Predicted: not flagged</div>
+          <div class="confusion__label" style="justify-content:center;">Predicted: flagged</div>
+
+          <div class="confusion__label">Actual: not flagged</div>
+          <div class="confusion__cell confusion__cell--tn"><span class="n">724</span><span class="l">True Negative</span></div>
+          <div class="confusion__cell confusion__cell--fp"><span class="n">1</span><span class="l">False Positive</span></div>
+
+          <div class="confusion__label">Actual: flagged</div>
+          <div class="confusion__cell confusion__cell--fn"><span class="n">248</span><span class="l">False Negative</span></div>
+          <div class="confusion__cell confusion__cell--tp"><span class="n">136</span><span class="l">True Positive</span></div>
+        </div>
+
+        <table class="metric-table">
+          <thead><tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead>
+          <tbody>
+            <tr><td>Not flagged</td><td>74.49%</td><td>99.86%</td><td>85.33%</td></tr>
+            <tr><td>Flagged</td><td>99.27%</td><td>35.42%</td><td>52.21%</td></tr>
+          </tbody>
+        </table>
+
+        <div class="importance-bar"><div class="importance-bar__label">total_item_dollars</div><div class="importance-bar__track"><div class="importance-bar__fill" style="width:29.7%;"></div></div><div class="importance-bar__value">29.7%</div></div>
+        <div class="importance-bar"><div class="importance-bar__label">invoice_dollars</div><div class="importance-bar__track"><div class="importance-bar__fill" style="width:21.7%;"></div></div><div class="importance-bar__value">21.7%</div></div>
+        <div class="importance-bar"><div class="importance-bar__label">total_item_quantity</div><div class="importance-bar__track"><div class="importance-bar__fill" style="width:21.0%;"></div></div><div class="importance-bar__value">21.0%</div></div>
+        <div class="importance-bar"><div class="importance-bar__label">invoice_quantity</div><div class="importance-bar__track"><div class="importance-bar__fill" style="width:14.9%;"></div></div><div class="importance-bar__value">14.9%</div></div>
+        <div class="importance-bar"><div class="importance-bar__label">Freight</div><div class="importance-bar__track"><div class="importance-bar__fill" style="width:12.8%;"></div></div><div class="importance-bar__value">12.8%</div></div>
+
+        <div class="callout" style="margin-top:16px;">
+          This model is tuned toward <strong>precision over recall</strong> for the flagged class — when it flags an
+          invoice it's right ~99% of the time, but it only catches ~35% of invoices that should be flagged.
+          Full discussion and improvement ideas are in the README.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ARCHITECTURE ============================== -->
+<section class="section ruled" id="architecture">
+  <div class="container">
+    <div class="reveal">
+      <span class="section__eyebrow">Under the hood</span>
+      <h2 class="section__heading">Two pipelines, one shared model store</h2>
+      <p class="section__lede">Training happens offline against the SQLite database; serving happens online against the same trained artifacts. Nothing about the API depends on the database being present.</p>
+
+      <div class="stack-row">
+        <span class="stack-pill">Python 3.11</span>
+        <span class="stack-pill">FastAPI</span>
+        <span class="stack-pill">scikit-learn 1.6</span>
+        <span class="stack-pill">pandas</span>
+        <span class="stack-pill">SQLite</span>
+        <span class="stack-pill">Pydantic v2</span>
+        <span class="stack-pill">Docker</span>
+        <span class="stack-pill">Vanilla JS</span>
+      </div>
+    </div>
+
+    <div class="arch-diagram reveal">
+      <div class="arch-track">
+        <span class="arch-track__title">Offline · Training</span>
+        <div class="arch-flow">
+          <div class="arch-node">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg></div>
+            <div class="arch-node__label">Data/inventory.db</div>
+            <div class="arch-node__sub">SQLite · 5 tables</div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="arch-node">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+            <div class="arch-node__label">data_preprocessing.py</div>
+            <div class="arch-node__sub">SQL joins + labels</div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="arch-node">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+            <div class="arch-node__label">train.py</div>
+            <div class="arch-node__sub">LR / DT / RF compete</div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="arch-node arch-node--accent">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z"/></svg></div>
+            <div class="arch-node__label">models/*.pkl</div>
+            <div class="arch-node__sub">best model, saved</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-track">
+        <span class="arch-track__title">Online · Serving</span>
+        <div class="arch-flow">
+          <div class="arch-node">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div>
+            <div class="arch-node__label">frontend/</div>
+            <div class="arch-node__sub">this page, fetch()</div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="arch-node">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/></svg></div>
+            <div class="arch-node__label">backend/main.py</div>
+            <div class="arch-node__sub">FastAPI routers</div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="arch-node">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+            <div class="arch-node__label">inference/</div>
+            <div class="arch-node__sub">load + predict</div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="arch-node arch-node--accent">
+            <div class="arch-node__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z"/></svg></div>
+            <div class="arch-node__label">models/*.pkl</div>
+            <div class="arch-node__sub">cached in memory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== API ============================== -->
+<section class="section" id="api">
+  <div class="container">
+    <div class="reveal">
+      <span class="section__eyebrow">API reference</span>
+      <h2 class="section__heading">Built to be called, not just clicked</h2>
+      <p class="section__lede">Every prediction on this page goes through a documented REST API you can call directly from your own code.</p>
+    </div>
+
+    <div class="api__grid reveal">
+      <div class="code-block">
+        <div class="code-block__head">
+          <span class="code-block__method">POST</span>
+          <span>/api/predict/freight-cost</span>
+        </div>
+        <pre><span class="text-faint">// request</span>
+{
+  <span class="k">"dollars"</span>: <span class="n">18500</span>
+}
+
+<span class="text-faint">// response</span>
+{
+  <span class="k">"dollars"</span>: <span class="n">18500.0</span>,
+  <span class="k">"predicted_freight"</span>: <span class="n">97.79</span>,
+  <span class="k">"freight_ratio_pct"</span>: <span class="n">0.529</span>
+}</pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block__head">
+          <span class="code-block__method">POST</span>
+          <span>/api/predict/invoice-risk</span>
+        </div>
+        <pre><span class="text-faint">// request</span>
+{
+  <span class="k">"invoice_quantity"</span>: <span class="n">120</span>,
+  <span class="k">"invoice_dollars"</span>: <span class="n">5400.0</span>,
+  <span class="k">"freight"</span>: <span class="n">210.0</span>,
+  <span class="k">"total_item_quantity"</span>: <span class="n">118</span>,
+  <span class="k">"total_item_dollars"</span>: <span class="n">5390.0</span>
+}
+
+<span class="text-faint">// response</span>
+{
+  <span class="k">"flagged"</span>: <span class="n">false</span>,
+  <span class="k">"risk_label"</span>: <span class="s">"Auto-Approved"</span>,
+  <span class="k">"flag_probability"</span>: <span class="n">0.3126</span>,
+  <span class="k">"confidence_pct"</span>: <span class="n">68.74</span>
+}</pre>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:32px;">
+      <a href="/api/docs" target="_blank" class="btn btn--ghost">
+        Open interactive API docs
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div>
+        <div class="footer__brand">
+          <svg class="nav__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="width:28px;height:28px;">
+            <circle cx="20" cy="20" r="18.5" stroke="var(--brand-gold)" stroke-width="1.2" opacity="0.55"/>
+            <circle cx="20" cy="20" r="13.5" stroke="var(--brand-gold)" stroke-width="1"/>
+            <path d="M13.5 15.5h13M13.5 20h13M13.5 24.5h8.5" stroke="var(--brand-gold-bright)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          Invoice Intelligence
+        </div>
+        <p class="footer__desc">A full-stack ML system for freight cost prediction and invoice risk flagging, built with FastAPI and scikit-learn. Open source, MIT licensed.</p>
+      </div>
+
+      <div class="footer__social">
+        <a href="https://github.com/AbhishekGrover1" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.07 11.07 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.44-2.7 5.42-5.28 5.7.42.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/abhishek-grover07" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg>
+        </a>
+        <a href="mailto:ss107456@gmail.com" aria-label="Email">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 6 8.5 7 8.5-7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__legal">© <span id="year">2026</span> Invoice Intelligence System · MIT License</p>
+      <div class="footer__signature">
+        Abhishek Grover
+        <span>AI / ML Engineer</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>

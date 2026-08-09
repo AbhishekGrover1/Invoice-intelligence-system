@@ -1,0 +1,48 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.Python
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Environment / secrets ---
+.env
+.env.local
+
+# --- Data ---
+# The full ~400MB SQLite database is intentionally excluded (see Data/README.md).
+# Only /Data/samples/*.csv is tracked.
+Data/*.db
+Data/*.sqlite
+Data/*.sqlite3
+
+# --- Model artifacts regenerated locally during development ---
+# (The repo ships with the trained models already in /models -- this only
+# ignores *extra* copies that train.py can create if run from other cwds.)
+invoice_flagging/models/
+freight_cost_prediction/local_models/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# --- Logs ---
+*.log
+
+# --- Docker ---
+# (kept out only if you build locally with volumes; harmless either way)
