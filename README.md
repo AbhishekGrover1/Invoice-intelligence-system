@@ -11,7 +11,7 @@
 
 **A full-stack ML system that predicts freight cost and flags high-risk invoices for manual review — trained on 5,543 real vendor invoices, served through a live FastAPI backend and a custom dark-themed frontend.**
 
-</div> 
+</div>  
 
 ---
 
