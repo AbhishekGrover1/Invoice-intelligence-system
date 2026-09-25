@@ -1,13 +1,12 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=0:08090B,100:1a1d24&height=200&section=header&text=Invoice%20Intelligence%20System&fontSize=40&fontColor=E0C383&fontAlignY=35&desc=Freight%20Cost%20%26%20Invoice%20Risk%20Prediction%20%C2%B7%20FastAPI%20%2B%20scikit-learn&descAlignY=55&descSize=16&animation=fadeIn)
- 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-view%20app-46E3B7?style=flat-square&logo=render&logoColor=white)](https://invoice-intelligence-system-8r36.onrender.com)
-![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-c6a15b?style=flat-square)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-view%20app-8A2BE2?style=flat-square&logo=render&logoColor=white)](https://invoice-intelligence-system-8r36.onrender.com)
+![Python](https://img.shields.io/badge/Python-3.11%2B-1E415E?style=flat-square&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-004D40?style=flat-square&logo=fastapi&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6-A65C00?style=flat-square&logo=scikitlearn&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-ready-0F4880?style=flat-square&logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-235336?style=flat-square)
+
 
 **A full-stack ML system that predicts freight cost and flags high-risk invoices for manual review — trained on 5,543 real vendor invoices, served through a live FastAPI backend and a custom dark-themed frontend.**
 
