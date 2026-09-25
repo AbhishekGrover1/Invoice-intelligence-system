@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.11%2B-1E415E?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-004D40?style=flat-square&logo=fastapi&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6-A65C00?style=flat-square&logo=scikitlearn&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-ready-0F4880?style=flat-square&logo=docker&logoColor=white)
+![Render](https://img.shields.io/badge/Render-ready-0F4880?style=flat-square&logo=Render&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-235336?style=flat-square)
 
 
