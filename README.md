@@ -1,5 +1,8 @@
-<div align="center">
+# *Invoice Intelligence System*
 
+
+<div align="center">
+    
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-view%20app-8A2BE2?style=flat-square&logo=render&logoColor=white)](https://invoice-intelligence-system-8r36.onrender.com)
 ![Python](https://img.shields.io/badge/Python-3.11%2B-1E415E?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-004D40?style=flat-square&logo=fastapi&logoColor=white)
@@ -14,7 +17,7 @@
 
 ---
 
-## Table of Contents
+## *Table of Contents*
 
 - [Overview](#overview)
 - [Live Demo](#live-demo)
@@ -36,7 +39,7 @@
 
 ---
 
-## Overview
+## *Overview*
 
 Invoice Intelligence System wraps two production `scikit-learn` models behind a REST API:
 
@@ -45,7 +48,7 @@ Invoice Intelligence System wraps two production `scikit-learn` models behind a 
 
 Both are trained offline against a real procurement SQLite database, then served by a FastAPI backend that a hand-built, dark-themed frontend calls live — no mock data, no static demo screenshots standing in for the real thing.
 
-## Live Demo
+## *Live Demo*
 
 **[invoice-intelligence-system-8r36.onrender.com](https://invoice-intelligence-system-8r36.onrender.com)**
 
@@ -53,7 +56,7 @@ This README intentionally skips screenshots — the entire point of the project 
 
 > Hosted on Render's free tier, so if the app has been idle the first request can take 30–50s to spin back up. It's fast on every request after that.
 
-## Key Features
+## *Key Features*
 
 - 🔮 **Two live ML models** served over a documented REST API, not notebooks-as-demos
 - 📦 **Batch invoice scoring** — upload a CSV, get risk predictions and summary stats for every row
@@ -62,7 +65,7 @@ This README intentionally skips screenshots — the entire point of the project 
 - 🐳 **One-command deploy** — a single Docker container serves both the API and the frontend
 - ✅ **26 passing tests** — unit tests on the inference layer, integration tests on every API route
 
-## Architecture
+## *Architecture*
 
 Training happens offline against the SQLite database; serving happens online against the same trained artifacts. The API has no runtime dependency on the database — only on the small `.pkl` files already committed in [`/models`](models).
 
@@ -87,7 +90,7 @@ flowchart LR
     API -->|response| BROWSER
 ```
 
-## Tech Stack
+## *Tech Stack*
 
 | Layer | Technology |
 |---|---|
@@ -99,7 +102,7 @@ flowchart LR
 | **Deployment** | Docker, Render (blueprint included), Railway/Heroku-style (`Procfile`) |
 | **Fonts** | Fraunces (display), IBM Plex Sans (body), IBM Plex Mono (data) |
 
-## Project Structure
+## *Project Structure*
 
 ```
 invoice-intelligence-system/
@@ -149,7 +152,7 @@ invoice-intelligence-system/
 └── Procfile                     # Railway / Heroku-style platforms
 ```
 
-## Dataset
+## *Dataset*
 
 Both models train on **[Vendor Performance Analysis](https://www.kaggle.com/datasets/harshmadhavan/vendor-performance-analysis)**, a public procurement dataset (SQLite, 5 tables, ~400MB). The full database isn't committed to this repo — GitHub rejects files over 100MB, and the running application doesn't need it anyway, only the trained `.pkl` files in `/models`. Full schema, sourcing, and small real CSV samples are documented in **[`Data/README.md`](Data/README.md)**.
 
@@ -158,11 +161,11 @@ Both models train on **[Vendor Performance Analysis](https://www.kaggle.com/data
 | `vendor_invoice` | 5,543 |
 | `purchases` | 2,372,474 |
 
-## Model Performance
+## *Model Performance*
 
 Real test-set metrics, reproduced by running the actual training pipeline (80/20 split, `random_state=42`) — not cherry-picked numbers.
 
-### Freight Cost Regression
+### *Freight Cost Regression*
 
 | Algorithm | MAE | RMSE | R² |
 |---|---|---|---|
@@ -172,7 +175,7 @@ Real test-set metrics, reproduced by running the actual training pipeline (80/20
 
 Selection rule (`train.py`): lowest MAE on the held-out test set. Freight scales almost linearly with invoice value in this dataset, so the simplest model wins fair and square.
 
-### Invoice Risk Classification
+### *Invoice Risk Classification*
 
 | Algorithm | Accuracy | F1 (flagged class) |
 |---|---|---|
@@ -204,7 +207,7 @@ Freight                ████████░░░░░░░░░░░
 
 > **Reading these numbers honestly:** this model is tuned toward precision over recall. When it flags an invoice, it's right ~99% of the time — but it only catches ~35% of invoices that should be flagged. See [Limitations & Future Work](#limitations--future-work) for why, and what would likely fix it.
 
-## Getting Started
+## *Getting Started*
 
 ```bash
 # 1. Clone and enter the repo
@@ -226,7 +229,7 @@ uvicorn backend.main:app --reload
 
 No database, no environment variables, and no extra setup required — the trained models are already in `/models`.
 
-## API Reference
+## *API Reference*
 
 Full interactive documentation (Swagger UI) is available at **`/api/docs`** once the app is running.
 
@@ -292,7 +295,7 @@ curl -X POST http://localhost:8000/api/predict/invoice-risk/batch \
 CSV must contain columns: `invoice_quantity, invoice_dollars, Freight, total_item_quantity, total_item_dollars`.
 </details>
 
-## Training the Models (Optional)
+## *Training the Models (Optional)*
 
 The app runs fine without ever touching this — it's only needed if you want to retrain on updated data.
 
@@ -308,7 +311,7 @@ python invoice_flagging/train.py
 
 Both scripts resolve every path relative to the project root, so they behave identically whether run from the repo root or from inside their own folder — and both always save to the shared `/models` directory.
 
-## Testing
+## *Testing*
 
 ```bash
 pytest tests/ -v
@@ -316,7 +319,7 @@ pytest tests/ -v
 
 26 tests: unit tests on the inference layer (`tests/test_inference.py`) using real examples pulled from the actual held-out test split, and integration tests on every API route (`tests/test_api.py`), including validation-error and malformed-CSV cases.
 
-## Deployment
+## *Deployment*
 
 **Docker (recommended — one container, both frontend and API):**
 
@@ -336,7 +339,7 @@ pip install -r requirements.txt
 uvicorn backend.main:app --host 0.0.0.0 --port $PORT
 ```
 
-## Engineering Notes
+## *Engineering Notes*
 
 A few things worth knowing if you're reading the code closely — this project started as a working prototype, and these are the fixes made to bring it to this state:
 
@@ -346,22 +349,21 @@ A few things worth knowing if you're reading the code closely — this project s
 - **Pinned scikit-learn to match training.** The shipped `.pkl` files were trained with scikit-learn 1.6.1; `requirements.txt` pins that exact version so there's no `InconsistentVersionWarning` at runtime.
 - **Reported the real, shipped model's metrics — not the best-looking ones available.** `Notebook/Invoice_Flagging.ipynb` explores stronger configurations than what's actually in `models/predict_flag_invoice.pkl`: the same 5 features without the `max_depth=6` cap reaches 88.37% accuracy (81% F1 on the flagged class), and the full 9-feature set — adding `avg_receiving_delay`, `days_po_to_invoice`, `days_to_pay`, and `total_brands` — reaches 96% accuracy (93% F1). The numbers in this README and on the live demo are for the model that's actually running, not the strongest one explored.
 
-## Limitations & Future Work
+## *Limitations & Future Work*
 
 - **Recall on flagged invoices is the known weak point** (35.42%). The model is precise but conservative — it under-flags. The notebook results above suggest two concrete paths to improve it: drop the `max_depth=6` cap (recovers ~29 points of F1 on the flagged class with the same 5 features), or reintroduce `avg_receiving_delay`, which was the single strongest predictor in exploratory testing but isn't in the production feature set — worth revisiting whether it's reliably available at the moment an invoice actually needs evaluating.
 - **Freight cost model uses one feature on purpose.** `Quantity` was in the original data but correlates heavily with `Dollars` and added no predictive value in testing, so it isn't collected in the UI or API — asking for it would imply it affects the prediction when it doesn't.
 - **No authentication.** This is a portfolio/demo deployment. Add an API key or OAuth layer before handling real invoice data.
 - **Batch upload caps at 5,000 rows per request** — fine for ad-hoc review, not for a nightly bulk job. A queued/async version would be the next step for production scale.
 
-## License
+## *License*
 
 MIT — see [LICENSE](LICENSE).
 
-## Connect
+## *Connect*
 
 <div align="center">
 
-Built by **Abhishek Grover** — AI/ML Engineer
 
 [![GitHub](https://img.shields.io/badge/GitHub-AbhishekGrover1-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/AbhishekGrover1)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-abhishek--grover07-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/abhishek-grover07)
