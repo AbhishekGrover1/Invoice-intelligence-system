@@ -365,9 +365,9 @@ MIT — see [LICENSE](LICENSE).
 <div align="center">
 
 
-[![GitHub](https://img.shields.io/badge/GitHub-AbhishekGrover1-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/AbhishekGrover1)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-abhishek--grover07-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/abhishek-grover07)
-[![Email](https://img.shields.io/badge/Email-ss107456%40gmail.com-c6a15b?style=flat-square&logo=gmail&logoColor=white)](mailto:ss107456@gmail.com)
+[![GitHub](https://img.shields.io/badge/GitHub-AbhishekGrover1-7C3AED?style=flat-square&logo=github&logoColor=white)](https://github.com/AbhishekGrover1)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-abhishek--grover07-7C3AED?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/abhishek-grover07)
+[![Email](https://img.shields.io/badge/Email-ss107456%40gmail.com-7C3AED?style=flat-square&logo=gmail&logoColor=white)](mailto:ss107456@gmail.com)
 
 *— Abhishek Grover*
 
